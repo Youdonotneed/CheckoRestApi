@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/style.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    >
+    <title>Информация о компаниях</title>
+</head>
+<body>
+
+    <h1>Поиск по ИНН</h1>
+    
+    <div class="form-group">
+        <input type="text" id="inn" placeholder="Введите ИНН">
+        
+        <select id="api-method">
+            <option value="company">Информация</option>
+            <option value="contracts">Контракты</option>
+            <option value="arbitrations">Арбитражи</option>
+        </select>
+        
+        <button onclick="searchCompany()"><i class="fas fa-search"></i></button>
+    </div>
+
+    <div id="result">Здесь появится результат</div>
+
+    <script>
+        async function searchCompany() {
+        const inn = document.getElementById('inn').value.trim();
+        const resultDiv = document.getElementById('result');
+        const method = document.getElementById('api-method').value;
+
+        if (!inn) {
+            resultDiv.innerHTML = 'Введите ИНН';
+            return;
+        }
+
+        resultDiv.textContent = 'Загрузка...';
+
+        try {
+            const response = await fetch(`/api/${method}?inn=${inn}`);
+            const data = await response.json();
+
+            if (!response.ok || data.error) {
+                throw new Error(data.error || 'Ошибка сервера');
+            }
+
+            resultDiv.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            resultDiv.innerHTML = `Ошибка: ${error.message}`;
+        }
+    }
+    </script>
+
+</body>
+</html>
