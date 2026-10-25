@@ -1,0 +1,113 @@
+openapi: 3.0.0
+info:
+  title: Checko API
+  description: REST API для получения данных о компаниях из Checko.ru
+servers:
+  - url: http://localhost:12345
+paths:
+    /api/company:
+      get:
+        summary: Информация о компании
+        tags:
+          - Компании
+        parameters:
+          - name: inn
+            in: query
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: Успешный ответ с данными
+            content:
+              application/json:
+                schema:
+                  type: object
+                example:
+                  data:
+                    name: "ПАО СБЕРБАНК"
+                    inn: "7707083893"
+                    status: "Действующая"
+          '400':
+            description: Не передан параметр inn
+            content:
+              application/json:
+                schema:
+                  type: object
+                example:
+                  error: "Введите ИНН компании"
+          '500':
+            description: Ошибка при запросе к Checko
+            content:
+              application/json:
+                schema:
+                  type: object
+                example:
+                  error: "Не удалось выполнить запрос: Operation timed out"
+    /api/contracts:
+      get:
+        summary: Контракты компании
+        tags:
+          - Компании
+        parameters:
+          - name: inn
+            in: query
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: Успешно
+          '400':
+            description: Не передан параметр inn
+            content:
+              application/json:
+                schema:
+                  type: object
+                example:
+                  error: "Введите ИНН компании"
+          '500':
+            description: Ошибка при запросе к Checko
+            content:
+              application/json:
+                schema:
+                  type: object
+                example:
+                  error: "Не удалось выполнить запрос: Operation timed out"
+    /api/arbitrations:
+      get:
+        summary: Арбитражные дела
+        tags:
+          - Компании
+        parameters:
+          - name: inn
+            in: query
+            required: true
+            schema:
+              type: string
+          - name: actual
+            in: query
+            required: false
+            schema:
+              type: boolean
+              default: true
+            description: Показывать только актуальные дела
+        responses:
+          '200':
+            description: Успешно
+          '400':
+            description: Не передан параметр inn
+            content:
+              application/json:
+                schema:
+                  type: object
+                example:
+                  error: "Введите ИНН компании"
+          '500':
+            description: Ошибка при запросе к Checko
+            content:
+              application/json:
+                schema:
+                  type: object
+                example:
+                  error: "Не удалось выполнить запрос: Operation timed out"
